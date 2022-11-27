@@ -1,0 +1,24 @@
+{% for field in login_form %}
+    {% for error in field.errors %}
+    <p style="color: red" class="text text-normal">{{ error }}</p>
+    {% endfor %}
+{% endfor %}
+{% if login_form.non_field_errors %}
+    <div style="color: red">
+        <p class="text text-normal">{{login_form.non_field_errors}}</p>
+    </div>
+{% endif %}
+
+{% if success_message %}
+    <div id="login-success-div">
+        <p class="text text-normal" style="color: green;">{{success_message}}</p>
+        <p>Redirected...</p>
+        <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <!-- USE REDIRECT LATER TO DESTINATION -->
+        <script>
+            setTimeout(location.reload(), 2100)
+        </script>
+    </div>
+{% endif %}

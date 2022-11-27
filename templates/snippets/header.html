@@ -1,0 +1,50 @@
+<header style="padding-top: 100px;">
+    <div id="header-ul">
+        <div class="header-li">
+            <div class="input-group" style="margin-right: 30px;">
+                <input type="text" class="form-control header-search" placeholder="Cari di toko kami..." style="border-radius: 10px;">
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="button" style="height: 100%; border-radius: 10px;">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <i class="fa-solid fa-heart header-i" style="margin-right: 15px;"></i>
+            <i class="fa-solid fa-cart-shopping header-i" style="margin-right: 35px;"></i>
+            {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="button-header bh-3 dropdown-toggle" data-bs-toggle="dropdown">
+                    <span><i class="fa-solid fa-user"></i></span>
+                    Akun Saya
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item p-1" href="#">
+                            <div class="row g-0">
+                                <div class="col-4 p-0 m-0" style="place-items: center; display: flex; justify-content: center;">
+                                    <span style="font-size: 30px; color: gray;"><i class="fa-solid fa-circle-user"></i></span>
+                                </div>
+                                <div class="col-8 p-0 m-0" >
+                                    <p class="font-weight-bolder">{{request.user}}</p>
+                                    <p style="font-size: 14px;" class="text-wrap">
+                                        <span><i class="fa-solid fa-ribbon" style="color: gray;"></i></span>
+                                        Sabiekah {{request.user.user_customer.strMembershipStatus}}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <hr>
+                    <li><a class="dropdown-item" href="#">Pembelian</a></li>
+                    <li><a class="dropdown-item" href="#">Pengaturan</a></li>
+                    <hr>
+                    <li><a class="dropdown-item font-weight-bolder" href="{% url 'logout' %}" style="color:#E83C3C;">Keluar</a></li>
+                </ul>
+            </div>
+            {% else %}
+            <button class="button-header bh-1" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#modalLogin">Masuk</button>
+            <button class="button-header bh-2" data-bs-toggle="modal" data-bs-target="#modalRegister">Daftar</button>
+            {% endif %}
+        </div>
+    </div>
+</header>

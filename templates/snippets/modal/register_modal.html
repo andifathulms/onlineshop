@@ -1,0 +1,56 @@
+<div class="modal fade" id="modalRegister" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body modal-login">
+            <main class="main">
+                <div class="container">
+                    <section class="wrapper">
+                        <div class="heading">
+                            <h1 class="text text-large">Sign Up</h1>
+                            <p class="text text-normal">Sudah punya akun? <span><a href="#" class="text text-links">Masuk dengan akun</a></span>
+                            </p>
+                        </div>
+                        <form name="signup" class="form" method="POST"> {% csrf_token %}
+                            <div class="input-control">
+                                <label for="name" class="input-label" hidden>Nama Lengkap</label>
+                                <input type="text" name="username" id="username" class="input-field" placeholder="Fullname">
+                            </div>
+                            <div class="input-control">
+                                <label for="email" class="input-label" hidden>Alamat Email</label>
+                                <input type="email" name="email" id="email" class="input-field" placeholder="Email Address">
+                            </div>
+                            <div class="input-control">
+                                <label for="password" class="input-label" hidden>Kata Sandi</label>
+                                <input type="password" name="password1" id="password1" class="input-field" placeholder="Password">
+                            </div>
+                            <div class="input-control">
+                                <label for="password" class="input-label" hidden>Konfirmasi Kata Sandi</label>
+                                <input type="password" name="password2" id="password2" class="input-field" placeholder="Confirm Password">
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckLogin">
+                                <label class="form-check-label" for="flexCheckLogin">
+                                    <p class="text text-normal">Terima persyaratan & syarat privasi</p>
+                                </label>
+                            </div>
+                            <div class="input-control">
+                                <input type="submit" name="submit" class="input-submit" value="Sign Up" hx-post="{% url 'account:register-check' %}" 
+                                hx-target="#registration-form-error" hx-trigger="click" hx-swap="innerHTML">
+                            </div>
+                        </form>
+                        <div id="registration-form-error">
+                            
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
