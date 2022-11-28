@@ -226,11 +226,35 @@
         border-radius: 50%;
         display: inline-block;
     }
+
+    .dot-large{
+        height: 35px;
+        width: 35px;
+        background-color: #BBB;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    #sidebar-left {
+        position: fixed;
+        top: 0;
+        left: -450px;
+        background: red;
+        height: 100%;
+        width: 450px;
+        transition: all .4s ease-in-out;
+    }
+    #sidebar-left.slide {
+        left: 0;
+        z-index: 999;
+    }
 </style>
 {% endblock style %}
 
 {% block content %}
 
+{% include 'product/snippets/product_list_left.html' %}
+{% include 'product/snippets/product_list_header.html' %}
 {% include 'product/snippets/product_card.html' %}
 
 {% endblock content %}
@@ -244,6 +268,33 @@
           opacity: "toggle"
         }, 300);
       });
+    });
+
+    $('#dropdown-sort').each(function (key, dropdown) {
+        var $dropdown = $(dropdown);
+        $dropdown.find('.dropdown-menu a').on('click', function () {
+            $dropdown.find('button').text('Urutkan Berdasarkan : ' + $(this).text());
+        });
+    });
+
+    $('#btn-filter').on("click", function() {
+        $('#sidebar-left').toggleClass('slide');  
+        // $('.content').toggleClass('slide').css({"height" : window.innerHeight});
+    })
+
+    $('#close-filter').on("click", function() {
+        $('#sidebar-left').toggleClass('slide');  
+    })
+
+    $(document).mouseup(function(e) 
+    {
+        var container = $("#sidebar-left");
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0 && container.hasClass("slide")) 
+        {
+            $('#sidebar-left').toggleClass('slide');
+        }
     });
 </script>
 {% endblock javascript %}
