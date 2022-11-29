@@ -29,6 +29,26 @@
 
         .carousel-2 .carousel-item{
             margin-right: 0 !important;
+            margin-left: 0 !important;
+        }
+
+        .carousel-2 .card{
+            border-radius: 20px;
+        }
+
+        #catalog-carousel img{
+            border-radius: 20px;
+        }
+
+        #article-carousel img{
+            border-top-left-radius: 20px 20px;
+            border-top-right-radius: 20px 20px;
+        }
+
+        .carousel-2 .card-img-top {
+            width: 100%;
+            height: 25vw;
+            object-fit: cover;
         }
 
         .active.carousel-item-left + .carousel-item-next.carousel-item-left, .carousel-item-next.carousel-item-left + .carousel-item, .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item, .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item {
@@ -91,7 +111,7 @@
 {% block content %}
     {% include 'snippets/main_carousel.html' %}
 
-    <div class="container-fluid" style="padding-left: 30px; padding-right: 30px;">
+    <div class="container-fluid" style="padding-left: 10%; padding-right: 10%;">
         {% include 'snippets/main_new_this_week.html' %}
         {% include 'snippets/main_voucher.html' %}
         {% include 'snippets/main_catalog.html' %}

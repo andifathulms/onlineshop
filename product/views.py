@@ -14,3 +14,13 @@ class SubCategoryViews(View):
         context["products"] = Product.objects.filter(sub_category__name=kwargs['type'])
         
         return render(request, 'product/product_list.html', context)
+
+class ProductDetailView(View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+
+        product = Product.objects.get(pk=kwargs['pk'])
+        context["product"] = product
+
+        return render(request, 'product/product_detail.html', context)

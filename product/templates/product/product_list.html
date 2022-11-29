@@ -254,10 +254,11 @@
 {% endblock style %}
 
 {% block content %}
-
-{% include 'product/snippets/product_list_left.html' %}
-{% include 'product/snippets/product_list_header.html' %}
-{% include 'product/snippets/product_card.html' %}
+<div class="container-fluid" style="padding-left: 10%; padding-right: 10%;">
+    {% include 'product/snippets/product_list_left.html' %}
+    {% include 'product/snippets/product_list_header.html' %}
+    {% include 'product/snippets/product_card.html' %}
+</div>
 
 {% endblock content %}
 

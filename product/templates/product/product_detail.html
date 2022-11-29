@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style>
+    #product-card .card {
+        border: 0px;
+        overflow: hidden;
+        background-color: #fff !important;
+    }
+
+    #product-card .thumbnail_images ul {
+        list-style: none;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        margin-top: 10px
+    }
+
+    #product-card .thumbnail_images ul li {
+        margin: 5px;
+        padding: 10px;
+        border: 2px solid #eee;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.5s
+    }
+
+    #product-card .thumbnail_images ul li:hover {
+        border: 1px solid #000
+    }
+
+    #product-card .main_image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #eee;
+        border-radius: 20px;
+        height: 500px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    #product-card .main_image img{
+        transition: all 0.3s;
+        transform: scale(1);
+    }
+
+    #product-card .main_image:hover img {
+        transform: scale(1.2);
+    }
+    #product-detail-title{
+        font-size: x-large;
+        font-weight: bolder;
+    }
+    #product-detail-price{
+        font-size: xx-large;
+        font-weight: bolder;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    #product-detail-sold-count{
+        font-size: medium;
+        color: gray;
+        font-weight: bolder;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container-fluid" style="padding-left: 10%; padding-right: 10%;">
+    {% include 'product/snippets/product_detail_card.html' %}
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+
+{% endblock javascript %}

@@ -1,40 +1,38 @@
 {% load humanize %}
 
 <section class="py-2">
-    <div class="container px-3 px-lg-4 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for product in products %}
-            <div class="post-module mb-3 p-0">
-                <!-- Thumbnail-->
-                <a href="{#% url 'marketplace:marketplace-detail' product.pk %#}">
-                <div class="thumbnail">
-                    {% with product.image.all|first as first_image %}
-                        <img src="{{first_image.image.url}}" />
-                    {% endwith %}
-                </div><!-- Post Content-->
-                <div class="post-content" style="text-align: center;">
-                    <div class="category"> {{product.discount}}% off </div>
-                    <div style="display: flex; align-items: middle; flex-direction: column;">
-                        <h3 class="title">{{ product.title }}</h3>
-                        <h2 class="price">Rp. {{ product.price|intcomma }}</h2>
-                    </div>
-                    <div class="description">
-                        <span style="font-size: 20px;">Pilihan Warna</span>
-                        <div>
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                            <span class="dot"></span> 
-                        </div>
-                    </div>
-                    <div class="post-meta">
-                        <!-- <span class="timestamp"><i class="fa fa-clock"></i> {{ product.created_on }}</span> -->
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        {% for product in products %}
+        <div class="post-module mb-3 p-0">
+            <!-- Thumbnail-->
+            <a href="{% url 'product:product-detail' product.pk %}">
+            <div class="thumbnail">
+                {% with product.image.all|first as first_image %}
+                    <img src="{{first_image.image.url}}" />
+                {% endwith %}
+            </div><!-- Post Content-->
+            <div class="post-content" style="text-align: center;">
+                <div class="category"> {{product.discount}}% off </div>
+                <div style="display: flex; align-items: middle; flex-direction: column;">
+                    <h3 class="title">{{ product.title }}</h3>
+                    <h2 class="price">Rp. {{ product.price|intcomma }}</h2>
+                </div>
+                <div class="description">
+                    <span style="font-size: 20px;">Pilihan Warna</span>
+                    <div>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span> 
                     </div>
                 </div>
-                </a>
+                <div class="post-meta">
+                    <!-- <span class="timestamp"><i class="fa fa-clock"></i> {{ product.created_on }}</span> -->
+                </div>
             </div>
-            {% endfor %}
+            </a>
         </div>
+        {% endfor %}
     </div>
 </section>
