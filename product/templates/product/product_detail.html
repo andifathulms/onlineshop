@@ -2,7 +2,7 @@
 
 {% block style %}
 <style>
-    #product-card .card {
+    #product-card .card, #product-comments .card {
         border: 0px;
         overflow: hidden;
         background-color: #fff !important;
@@ -63,7 +63,98 @@
         color: gray;
         font-weight: bolder;
     }
+    .add-to-cart{
+        border: 1px solid;
+        border-color: #C59327;
+        border-radius: 20px;
+        padding: 16px;
+    }
+    .quantity {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        padding: 0;
+    }
+    .quantity__minus,
+    .quantity__plus {
+        display: block;
+        width: 22px;
+        height: 23px;
+        margin: 0;
+        background: #8184a1;
+        text-decoration: none;
+        text-align: center;
+        line-height: 23px;
+        border-radius: 20px;
+        border: 2px;
+        border-color: #C59327;
+    }
+    .quantity__minus:hover,
+    .quantity__plus:hover {
+        background: #575b71;
+        color: #fff;
+    } 
+    .quantity__minus {
+        border-radius: 3px 0 0 3px;
+    }
+    .quantity__plus {
+        border-radius: 0 3px 3px 0;
+    }
+    .quantity__input {
+        width: 32px;
+        height: 23px;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        border: none;
+        background: #fff;
+        color: #8184a1;
+    }
+    #product-comment-header{
+        display: flex;
+        align-content: space-around;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-rating{
+        font-weight: 600;
+        font-size: 60px;
+        line-height: 100%;
+        color: #404040;
+    }
+
+    .dot-large{
+        height: 35px;
+        width: 35px;
+        background-color: #BBB;
+        border-radius: 50%;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .trapz-large{
+        height: 35px;
+        width: 45px;
+        background-color: #BBB;
+        border-radius: 25%;
+        display: inline-block;
+        cursor: pointer;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 16px;
+    }
+
+    .span-clicked{
+        border: 3px solid;
+        border-color: black;
+        opacity: 0.8;
+    }
 </style>
+
+{% include 'product/snippets/css/color_palette.html' %}
+
 {% endblock style %}
 
 {% block content %}
@@ -74,5 +165,60 @@
 {% endblock content %}
 
 {% block javascript %}
+<script>
+    $(document).ready(function() {
+    const minus = $('.quantity__minus');
+    const plus = $('.quantity__plus');
+    const input = $('.quantity__input');
+    const subtotal_price = $('#subtotal-product-price');
+    minus.click(function(e) {
+        e.preventDefault();
+        var value = input.val();
+        if (value > 1) {
+        value--;
+        }
+        input.val(value);
+        subtotal_price.text(value*{{product.price}})
+    });
+    
+    plus.click(function(e) {
+        e.preventDefault();
+        var value = input.val();
+        if (value < {{product.stock_count}}){
+            value++;
+        }
+        input.val(value);
+        subtotal_price.text(value*{{product.price}})
+    })
+    });
+</script>
 
+<script>
+    $(".color-span").click(function(){
+        var color_id = $(this).attr('id')
+        var color = color_id.split('-')[1]
+        var color_pk = color_id.split('-')[2]
+
+        var size_div_id = 'id-size-' + color
+        var size_div_cls = 'cls-size'
+        
+        $('.color-span').removeClass('span-clicked')
+        $(this).addClass('span-clicked')
+        $('#title-color').text(color)
+        $('#colorId').val(color_pk)
+
+        $('.' + size_div_cls).addClass('d-none')
+        $('#' + size_div_id).removeClass('d-none')
+    });
+
+    $(".size-span").click(function(){
+        var size_id = $(this).attr('id')
+        var size = size_id.split('-')[1]
+        var size_pk = size_id.split('-')[2]
+        $('.size-span').removeClass('span-clicked')
+        $(this).addClass('span-clicked')
+        $('#title-size').text(size)
+        $('#sizeId').val(size_pk)
+    });
+</script>
 {% endblock javascript %}

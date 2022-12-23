@@ -388,6 +388,11 @@
                 line-height: 2em;
             }
            
+            .btn-header{
+                display: flex;
+                border: none;
+                padding: 0;
+            }
         </style>
         {% block style %}{% endblock style %}
     </head>
@@ -415,6 +420,12 @@
 
         <!-- HTMX-->
         <script src="https://unpkg.com/htmx.org@1.1.0"></script>
+        <!-- handling CSRF request -->
+        <script>
+            document.body.addEventListener('htmx:configRequest', (event) => {
+                event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+            })
+        </script>
 
         <!-- jquery -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js" integrity="sha512-WNLxfP/8cVYL9sj8Jnp6et0BkubLP31jhTG9vhL/F5uEZmg5wEzKoXp1kJslzPQWwPT1eyMiSxlKCgzHLOTOTQ==" crossorigin="anonymous"></script>

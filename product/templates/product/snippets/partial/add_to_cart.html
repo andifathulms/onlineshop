@@ -1,0 +1,60 @@
+{% load humanize %}
+
+{% if error %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Lengkapi warna dan ukuran terlebih dahulu</strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% else %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Berhasil menambahkan item ke keranjang</strong> 
+    <p><a href="{% url 'orders:cart' %}">Check keranjangmu sekarang</a></p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<div class="add-to-cart">
+    <form method="">{% csrf_token %}
+        <p style="display: flex ; justify-content: center; align-content: center;">Atur jumlah dan catatan</p>
+        <div class="quantity mb-4">
+            <a href="#" class="quantity__minus"><span>-</span></a>
+            <input type="hidden" id="productId" name="productId" value="{{product.id}}">
+            <input type="hidden" id="colorId" name="colorId" value="{{color.id}}">
+            <input type="hidden" id="sizeId" name="sizeId" value="{{size.id}}">
+            <input name="quantity" type="text" class="quantity__input" value="1">
+            <a href="#" class="quantity__plus"><span>+</span></a>
+            <span>Stok total : {{product.stock_count}}</span>
+        </div>
+        <p style="display: flex ; justify-content: space-evenly; align-content: center; color: #C59327;">
+            <span><i class="fa-solid fa-pen"></i></span> 
+            Tambah Catatan
+        </p>
+        <div class="row">
+            <div class="col">
+                <p style="font-size: smaller; color: gray; font-weight:bolder; margin-left: 5px;">Subtotal</p>
+            </div>
+            <div class="col">
+                <p style="font-size: larger; color: gray; font-weight:bolder;">
+                    Rp. <span id="subtotal-product-price">{{product.price|intcomma}}</span>
+                </p>
+            </div>
+        </div>
+        <button type="submit" class="btn button-header bh-2 w-100 mb-2" name="add-to-cart"
+        hx-post="{% url 'product:add-to-cart' product.pk %}"
+        hx-target="#add-to-cart-div" hx-trigger="click"
+        hx-swap="innerHTML"
+        >
+            <span><i class="fa-solid fa-cart-arrow-down"></i></span> 
+            Keranjang
+        </button>
+        <button type="submit" class="btn button-header bh-1 w-100 mb-2" name="buy"><span><i class="fa-solid fa-bag-shopping"></i></span> Beli Sekarang</button>
+    </form>
+    <div class="row" style="color: grey;">
+        <div class="col">
+            <button type="button" class="btn w-100"><span><i class="fa-solid fa-heart"></i></span> Wishlist</button>
+        </div>
+        <div class="col">
+            <button type="button" class="btn w-100"><span><i class="fa-solid fa-share-nodes"></i></span> Share</button>
+        </div>
+    </div>
+</div>

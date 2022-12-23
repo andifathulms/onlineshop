@@ -1,0 +1,48 @@
+{% load humanize %}
+<div class="cart-all-products">
+    <form id="form-card-detail" method="POST">{% csrf_token %}
+        <div class="form-check" style="margin-bottom: 10px; display: flex; justify-content: space-between; margin-right: 60px;">
+            <div>
+                <input class="form-check-input chk-cart" type="checkbox" id="checkAll" value="0-0">
+                <label class="form-check-label" style="color: #858585;">
+                    Pilih Semua Barang
+                </label>
+            </div>
+            <a href="" style="color: #C59327; text-decoration: none; font-weight: 700;">Hapus</a>
+        </div>
+        <hr style="margin-bottom: 30px; color: #C59327; width: 100%;">
+        <fieldset>
+            {% for container in cart_products %}
+            <div class="form-check">
+                <input class="form-check-input chk-cart" type="checkbox" value="{{container.product.price}}-{{container.product.discount_amount}}-{{container.pk}}">
+                <label class="form-check-label" style="display: block !important;">
+                    <div style="display: flex; margin-left: 10px;">
+                        {% with container.product.image.all|first as first_image %}
+                            <div class="cart-product-img" style="margin-right: 15px;">
+                                <img src="{{first_image.image.url}}" width="100%" height="100%">
+                            </div>
+                        {% endwith %}
+                        <div>
+                            <p style="color: #404040; font-weight: normal; font-size: larger;">{{container.product.title}} - ({{container.color_and_size.color}},{{container.color_and_size.size}})</p>
+                            <p style="color: #404040; font-weight: bolder;">Rp. {{container.product.price|intcomma}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8" style="display: flex !important; justify-content: flex-end">
+                            <div style="display: flex;">
+                                <span style="font-size: smaller; color: #9C9C9C; margin-right: 15px;">Pindahkan ke wishlist</span>
+                                <span style="font-size: smaller; color: #9C9C9C; margin-right: 15px;">|</span>
+                                <span style="font-size: smaller; color: #9C9C9C; margin-right: 15px;"><i class="fa-solid fa-trash"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-4 quantity">
+                            <input type="number" name="quantity" min="1" max="{{container.product.stock_count}}" id="quantity-{{container.pk}}" value="{{container.quantity}}">
+                        </div>
+                    </div>
+                </label>
+            </div>
+            <hr style="margin-bottom: 30px; margin-top: 10px; color: #C59327; width: 100%;">
+            {% endfor %}
+        </fieldset>  
+    </form>
+</div>

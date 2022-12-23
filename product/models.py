@@ -25,12 +25,20 @@ class Product(models.Model):
     price           = models.PositiveIntegerField()
     discount        = models.PositiveIntegerField(default=0)
     image           = models.ManyToManyField('ImageProduct', blank=True)
+    stock_count     = models.PositiveIntegerField(default=0)
+    sold_count      = models.PositiveIntegerField(default=0)
 
     def __str__(self) -> str:
         return self.sub_category.name + " - " + self.title
     
+    @property
     def realPrice(self):
         return round(self.price*(100-self.discount)/100)
+    
+    @property
+    def discount_amount(self):
+        return round(self.price*(self.discount)/100)
+    
 
 class Size(models.Model):
     name            = models.CharField(max_length=5)
@@ -59,6 +67,9 @@ class ColorAndSizeAvailability(models.Model):
 
     def __str__(self) -> str:
         return self.product.__str__() + " - " + self.color_and_size.__str__() + " - " + str(self.count)
+    
+    def returnColorDistinct(self):
+        return self.color_and_size.color
 
 class ImageProduct(models.Model):
     image = models.ImageField(upload_to='prduct', blank=True, null=True)

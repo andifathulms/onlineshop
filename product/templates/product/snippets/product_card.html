@@ -3,7 +3,7 @@
 <section class="py-2">
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
         {% for product in products %}
-        <div class="post-module mb-3 p-0">
+        <div class="post-module mb-3 mx-3 p-0">
             <!-- Thumbnail-->
             <a href="{% url 'product:product-detail' product.pk %}">
             <div class="thumbnail">
@@ -20,11 +20,9 @@
                 <div class="description">
                     <span style="font-size: 20px;">Pilihan Warna</span>
                     <div>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span> 
+                        {% for color in product.product_cs.color_and_size %}
+                            <span class="dot"></span>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="post-meta">

@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block style %}
+
+<style>
+    #cart-header{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #cart-header p {
+        color: #404040;
+    }
+
+    #cart-header h3{
+        color: #404040;
+        font-weight: bolder;
+    }
+
+    #cart-card-blank .card{
+        border: 0px;
+        overflow: hidden;
+        background-color: #fff !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    #cart-card .card{
+        border: 0px;
+        overflow: hidden;
+        background-color: #fff !important;
+        padding: 20px;
+        display: flex;
+    }
+
+    #cart-card-blank h6{
+        color: #404040;
+        font-weight: bolder;
+        margin-top: 10px;
+    }
+
+    #cart-card-blank h6{
+        color: #404040;
+        margin-bottom: 10px;
+    }
+
+    .cart-all-products{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .chk-cart{
+        accent-color: #C59327;
+        filter: hue-rotate(180deg)
+    }
+
+    .cart-product-img{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #eee;
+        border-radius: 20px;
+        height: 110px;
+        width: 110px;
+        overflow: hidden;
+    }
+
+    .cart-summary-card{
+        border: 1px solid;
+        border-color: #DEDEDE;
+        padding: 16px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button
+    {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number]
+    {
+        -moz-appearance: textfield;
+    }
+
+    .quantity input {
+        width: 45px;
+        height: 42px;
+        line-height: 1.65;
+        float: left;
+        display: block;
+        padding: 0;
+        margin: 0;
+        padding-left: 20px;
+        border: 1px solid #eee;
+    }
+
+    .quantity input:focus {
+        outline: 0;
+    }
+
+    .quantity-nav {
+        position: relative;
+        height: 42px;
+    }
+
+    .quantity-button {
+        position: relative;
+        cursor: pointer;
+        border-left: 1px solid #eee;
+        width: 20px;
+        text-align: center;
+        color: #333;
+        font-size: 13px;
+        font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+        line-height: 1.7;
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+    }
+
+    .quantity-button.quantity-up {
+        position: absolute;
+        height: 50%;
+        top: 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .quantity-button.quantity-down {
+        position: absolute;
+        bottom: -1px;
+        height: 50%;
+    }
+
+</style>
+{% include 'product/snippets/css/product_card_css.html' %}
+{% endblock style %}
+
+{% block content %}
+<div class="container-fluid" style="padding-left: 10%; padding-right: 10%;">
+    {% if products_in_cart > 0 %}
+        {% include 'orders/snippets/cart.html' %}
+    {% else %}
+        {% include 'orders/snippets/cart_blank.html' %}
+    {% endif %}
+
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; margin-bottom: 10px;">
+        <h3 style="color: #404040; font-weight: bolder;">Terakhir Kamu Lihat</h3>
+    </div>
+    {% include 'product/snippets/product_card.html' %}
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script>
+    $( document ).ready(function() {
+        $("input:checkbox:not(#flexCheckLogin)").prop('checked', true);
+    });
+    
+    $("#checkAll").change(function () {
+        $("input:checkbox:not(#flexCheckLogin)").prop('checked', $(this).prop("checked"));
+    });
+    
+    $("#form-card-detail").change(function(){
+        var totalPrice = 0, values = [];
+        var totalDiscount = 0
+
+        $('input[type=checkbox].chk-cart').each( function() {
+            if( $(this).is(':checked') ) {
+                var temp = $(this).val().split("-")
+                var price = temp[0]
+                var discount = temp[1]
+                var quantity = $('#' + 'quantity-' + temp[2]).val()
+
+                values.push(price);
+                totalPrice += parseInt(price)*(parseInt(quantity) || 0);
+                totalDiscount += parseInt(discount)*(parseInt(quantity) || 0);
+            }
+        });
+
+
+        $("#span-raw-price").text(totalPrice);
+        $("#span-discount-price").text(totalDiscount);
+        $("#span-total-price").text(totalPrice-totalDiscount);
+    })
+
+    jQuery('<div class="quantity-nav"><div class="quantity-button quantity-up">+</div><div class="quantity-button quantity-down">-</div></div>').insertAfter('.quantity input');
+    jQuery('.quantity').each(function() {
+      var spinner = jQuery(this),
+        input = spinner.find('input[type="number"]'),
+        btnUp = spinner.find('.quantity-up'),
+        btnDown = spinner.find('.quantity-down'),
+        min = input.attr('min'),
+        max = input.attr('max');
+
+      btnUp.click(function() {
+        var oldValue = parseFloat(input.val());
+        if (oldValue >= max) {
+          var newVal = oldValue;
+        } else {
+          var newVal = oldValue + 1;
+        }
+        spinner.find("input").val(newVal);
+        spinner.find("input").trigger("change");
+      });
+
+      btnDown.click(function() {
+        var oldValue = parseFloat(input.val());
+        if (oldValue <= min) {
+          var newVal = oldValue;
+        } else {
+          var newVal = oldValue - 1;
+        }
+        spinner.find("input").val(newVal);
+        spinner.find("input").trigger("change");
+      });
+
+    });
+</script>
+{% endblock javascript %}

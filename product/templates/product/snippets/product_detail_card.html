@@ -4,6 +4,8 @@
     <div class="row justify-content-center">
         <div class="card">
             <div class="row g-0">
+
+                <!-- PRODUCT IMAGE -->
                 <div class="col-md-4">
                     <div class="d-flex flex-column justify-content-center">
                         {% with product.image.all|first as first_image %}
@@ -20,19 +22,52 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- PRODUCT DESCRIPTION -->
                 <div class="col-md-5">
                     <div class="py-3 px-5">
                         <div id="product-detail-middle-upper">
                             <div id="product-detail-title" class="d-flex justify-content-between align-items-center">
-                                <p>{{product.title}}</p>
+                                <p>{{product.title}} <span id="title-color"></span> <span id="title-size"></span></p>
                             </div>
                             <div id="product-detail-sold-count">
-                                <p>Terjual 10</p>
+                                <p>Terjual {{product.sold_count}}</p>
                             </div>
                             <div id="product-detail-price">
                                 <p>Rp. {{product.price|intcomma}}</p>
                             </div>
-                            <hr style="width: 100%; color: #BAD1C2; border: none; height: 4px;">
+                            <div>
+                                <p style="margin-bottom: 5px; color: #404040;">
+                                    Pilih Warna : <span style="color: #9C9C9C;">{{color_and_size|length}} Warna</span>
+                                </p>
+                                {% for color in color_and_size %}
+                                    <span class="dot-large color-span 
+                                    {% if color.0.name == 'Putih' %} 
+                                        span-white 
+                                    {% elif color.0.name == 'Merah' %} 
+                                        span-red 
+                                    {% elif color.0.name == 'Hitam' %} 
+                                        span-black
+                                    {% elif color.0.name == 'Pink' %} 
+                                        span-pink 
+                                    {% endif %}
+                                    " id="color-{{color.0.name}}-{{color.0.id}}">
+                                    </span>
+                                {% endfor %}
+                            </div>
+
+                            {% for color in color_and_size %}
+                                <div class="d-none cls-size" id="id-size-{{color.0}}">
+                                    <p style="margin-bottom: 5px; color: #404040;">
+                                        Pilih Ukuran : <span style="color: #9C9C9C;">{{color.1|length}} Ukuran</span>
+                                    </p>
+                                    {% for size in color.1 %}
+                                    <span class="trapz-large size-span" id="size-{{size.name}}-{{size.id}}">{{size.name}}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                            <hr style="width: 100%; color: #BAD1C2; border: none; height: 4px; margin-top: 15px;">
                         </div>
 
                         <div id="product-detail-middle-bottom" class="mt-3">
@@ -44,7 +79,7 @@
                                     <button class="nav-link" id="specification-tab" data-bs-toggle="tab" data-bs-target="#specification-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Spesifikasi</button>
                                 </li>
                             </ul>
-                            <div class="tab-content" id="product-detail-middle-bottom-nav-content">
+                            <div class="tab-content" id="product-detail-middle-bottom-nav-content" style="overflow: hidden; overflow-y: scroll; max-height: 500px;">
                                 <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
                                     <div class="mt-3 p-2">
                                         <p style="text-align: justify; font-size: medium;">{{product.description|safe}}</p>  
@@ -52,6 +87,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="specification-tab-pane" role="tabpanel" aria-labelledby="specification-tab" tabindex="0">
                                     <div class="mt-3 p-2">
+                                        <p style="font-size: large; font-weight: bolder;">Ukuran</p>
                                         <p style="text-align: justify; font-size: medium;">{{product.size_desc|safe}}</p>  
                                     </div>
                                 </div>
@@ -61,10 +97,85 @@
                         
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card">
 
+                <!-- PRODUCT CART SUMMARY -->
+                <div class="col-md-3" id="add-to-cart-div">
+                    <div class="add-to-cart">
+                        <form method="">{% csrf_token %}
+                            <p style="display: flex ; justify-content: center; align-content: center;">Atur jumlah dan catatan</p>
+                            <div class="quantity mb-4">
+                                <a href="#" class="quantity__minus"><span>-</span></a>
+                                <input type="hidden" id="productId" name="productId" value="{{product.id}}">
+                                <input type="hidden" id="colorId" name="colorId" value="">
+                                <input type="hidden" id="sizeId" name="sizeId" value="">
+                                <input name="quantity" type="text" class="quantity__input" value="1">
+                                <a href="#" class="quantity__plus"><span>+</span></a>
+                                <span>Stok total : {{product.stock_count}}</span>
+                            </div>
+                            <p style="display: flex ; justify-content: space-evenly; align-content: center; color: #C59327;">
+                                <span><i class="fa-solid fa-pen"></i></span> 
+                                Tambah Catatan
+                            </p>
+                            <div class="row">
+                                <div class="col">
+                                    <p style="font-size: smaller; color: gray; font-weight:bolder; margin-left: 5px;">Subtotal</p>
+                                </div>
+                                <div class="col">
+                                    <p style="font-size: larger; color: gray; font-weight:bolder;">
+                                        Rp. <span id="subtotal-product-price">{{product.price|intcomma}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button type="button" class="btn button-header bh-2 w-100 mb-2" name="add-to-cart"
+                            hx-post="{% url 'product:add-to-cart' product.pk %}"
+                            hx-target="#add-to-cart-div" hx-trigger="click"
+                            hx-swap="innerHTML"
+                            >
+                                <span><i class="fa-solid fa-cart-arrow-down"></i></span> 
+                                Keranjang
+                            </button>
+                            <button type="submit" class="btn button-header bh-1 w-100 mb-2" name="buy"><span><i class="fa-solid fa-bag-shopping"></i></span> Beli Sekarang</button>
+                        </form>
+                        <div class="row" style="color: grey;">
+                            <div class="col">
+                                <button type="button" class="btn w-100"
+                                hx-post="{% url 'product:add-to-wishlist' product.pk %}"
+                                hx-target="this" hx-trigger="click"
+                                hx-swap="innerHTML"
+                                >
+                                    <span><i class="fa-solid fa-heart"></i></span>
+                                    Wishlist
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn w-100"><span><i class="fa-solid fa-share-nodes"></i></span> Share</button>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<section class="py-2" id="product-comments">
+    <div class="row justify-content-center">
+        <div class="card">
+            <div id="product-comment-header">
+                <h3 style="color: gray;">Ulasan Pembeli</h3>
+                <p style="font-size: smaller; color: gray;">Menampilkan 5 dari 12 ulasan</p>
+            </div>
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <div style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center; align-content: center;">
+                        <p class="product-rating"><span style="color: gold !important;"><i class="fa-regular fa-star"></i></span> 4.9</p>
+                        <p style="color: gray;">(3 ulasan)</p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    
                 </div>
             </div>
         </div>

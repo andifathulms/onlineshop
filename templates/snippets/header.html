@@ -11,8 +11,12 @@
                     </button>
                 </div>
             </div>
-            <i class="fa-solid fa-heart header-i" style="margin-right: 15px;"></i>
-            <i class="fa-solid fa-cart-shopping header-i" style="margin-right: 35px;"></i>
+            <a class="btn btn-header">
+                <i class="fa-solid fa-heart header-i" style="margin-right: 15px;"></i>
+            </a>
+            <a class="btn btn-header" href="{% url 'orders:cart' %}">
+                <i class="fa-solid fa-cart-shopping header-i" style="margin-right: 35px;"></i>
+            </a>
             {% if user.is_authenticated %}
             <div class="dropdown">
                 <button class="button-header bh-3 dropdown-toggle" data-bs-toggle="dropdown">
@@ -31,7 +35,8 @@
                                     <p class="font-weight-bolder">{{request.user}}</p>
                                     <p style="font-size: 14px;" class="text-wrap">
                                         <span><i class="fa-solid fa-ribbon" style="color: gray;"></i></span>
-                                        Sabiekah {{request.user.user_customer.strMembershipStatus}}</p>
+                                        Sabiekah {{request.user.user_customer.strMembershipStatus}}
+                                    </p>
                                 </div>
                             </div>
                         </a>

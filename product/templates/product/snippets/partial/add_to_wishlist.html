@@ -1,0 +1,14 @@
+{% load humanize %}
+
+{% if error %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Lengkapi warna dan ukuran terlebih dahulu</strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% else %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Berhasil menambahkan item ke wishlist</strong> 
+    <p><a href="{% url 'orders:cart' %}">Check wishlist mu</a></p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}

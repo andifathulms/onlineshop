@@ -1,0 +1,41 @@
+{% load humanize %}
+
+<div class="cart-summary-card">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="footer-input" placeholder="Masukkan Kode Voucher">
+        <button class="btn" type="button" style="background-color: #DCB657; color:azure; font-weight:bold; font-size:smaller;">Gunakan</button>
+    </div>
+    <p style="color: #404040; font-weight: bolder;">Ringkasan Belanja</p>
+    <div class="row">
+        <div class="col-8">
+            <p style="color: #9C9C9C; font-size: smaller;">Total Harga ( {{cart.products.count}} barang )</p>
+        </div>
+        <div class="col-4">
+            <p style="color: #9C9C9C; font-size: smaller; font-weight: 400;">
+                Rp. <span id="span-raw-price">{{cart.calculate_raw_price|intcomma}}</span>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <p style="color: #9C9C9C; font-size: smaller;">Total Diskon Barang</p>
+        </div>
+        <div class="col-4">
+            <p style="color: #9C9C9C; font-size: smaller; font-weight: 400;">
+                Rp. <span id="span-discount-price">{{cart.calculate_discount_amount|intcomma}}</span>
+            </p>
+        </div>
+    </div>
+    <hr style="margin-bottom: 17px;">
+    <div class="row">
+        <div class="col-8">
+            <h5 style="margin-bottom: 17px;">Total Harga</h5>
+        </div>
+        <div class="col-4">
+            <p style="color: #9C9C9C; font-size: smaller; font-weight: bolder;">
+                Rp. <span id="span-total-price">{{cart.calculate_total_price|intcomma}}</span>
+            </p>
+        </div>
+    </div>
+    <button type="submit" class="btn button-header bh-2 w-100 mb-2"><span><i class="fa-solid fa-cart-arrow-down"></i></span> Beli</button>
+</div>

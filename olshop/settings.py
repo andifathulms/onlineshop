@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
 
     'storages',
+    'django_summernote',
 
     'account',
     'product',
+    'orders',
 ]
 
 MIDDLEWARE = [

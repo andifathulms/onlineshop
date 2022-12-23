@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AnonymousUser
+from django.contrib.postgres.fields import ArrayField
 
 from django.utils.translation import gettext_lazy as _
 
@@ -49,55 +50,80 @@ class Account(AbstractBaseUser):
 	def __str__(self):
 		return self.username
 
-    # For checking permissions. to keep it simple all admin have ALL permissons
+	# For checking permissions. to keep it simple all admin have ALL permissons
 	def has_perm(self, perm, obj=None):
 		return self.is_admin
 
 	# Does this user have permission to view this app? (ALWAYS YES FOR SIMPLICITY)
 	def has_module_perms(self, app_label):
 		return True
-    
+	
 class Customer(models.Model):
 
-    class Member(models.TextChoices):
-        EMPTY = 'NO', _('Not a member')
-        SILVER = 'SV', _('Silver')
-        GOLD = 'GD', _('Gold')
-        PLATINUM = 'PT', _('Platinum')
-        DIAMOND = 'DM', _('Diamond')
+	class Member(models.TextChoices):
+		EMPTY = 'NO', _('Not a member')
+		SILVER = 'SV', _('Silver')
+		GOLD = 'GD', _('Gold')
+		PLATINUM = 'PT', _('Platinum')
+		DIAMOND = 'DM', _('Diamond')
 
-    account                 = models.OneToOneField('Account', primary_key=True, on_delete=models.CASCADE, related_name="user_customer")
-    phone_number            = models.CharField(max_length=30, blank=True, null=True)
-    transaction_count       = models.PositiveIntegerField(default=0)
-    transaction_item_count  = models.PositiveIntegerField(default=0)
-    transaction_total_count = models.BigIntegerField(default=0)
-    membership_status       = models.CharField(max_length=2, choices=Member.choices, default=Member.EMPTY)
-    membership_points       = models.BigIntegerField(default=0)
+	account                 = models.OneToOneField('Account', primary_key=True, on_delete=models.CASCADE, related_name="user_customer")
+	phone_number            = models.CharField(max_length=30, blank=True, null=True)
+	transaction_count       = models.PositiveIntegerField(default=0)
+	transaction_item_count  = models.PositiveIntegerField(default=0)
+	transaction_total_count = models.BigIntegerField(default=0)
+	membership_status       = models.CharField(max_length=2, choices=Member.choices, default=Member.EMPTY)
+	membership_points       = models.BigIntegerField(default=0)
 
-    def __str__(self) -> str:
-        return self.account.username + " " + self.account.email
-    
-    def strMembershipStatus(self):
-        if self.membership_status == "NO":
-            return "Not a member yet"
-        elif self.membership_status == "SV":
-            return "Silver"
-        elif self.membership_status == "GD":
-            return "Gold"
-        elif self.membership_status == "PT":
-            return "Platinum"
-        elif self.membership_status == "DM":
-            return "Diamond"
+	last_view_products 		= ArrayField(models.PositiveIntegerField(), default=list)
+	
+
+	def __str__(self) -> str:
+		return self.account.username + " " + self.account.email
+	
+	def strMembershipStatus(self):
+		if self.membership_status == "NO":
+			return "Not a member yet"
+		elif self.membership_status == "SV":
+			return "Silver"
+		elif self.membership_status == "GD":
+			return "Gold"
+		elif self.membership_status == "PT":
+			return "Platinum"
+		elif self.membership_status == "DM":
+			return "Diamond"
+	
+	def addToLastView(self, id):
+
+		def push(obj, id, k=4):
+			for i in range(k,-1,-1):
+				if i == 0:
+					obj[i] = id
+				else:
+					obj[i] = obj[i-1]
+
+		last_view = self.last_view_products
+		
+		if id in last_view:
+			push(last_view, id, last_view.index(id))
+		else:
+			push(last_view, id)
+
+		self.last_view_products = last_view
+		self.save()
+	
+	def returnCleanLastView(self):
+		return [k for k in self.last_view_products if k != 0]
 
 class Address(models.Model):
-    customer          = models.ForeignKey('Customer', on_delete=models.CASCADE)
-    province          = models.CharField(max_length=255)
-    regency           = models.CharField(max_length=255)
-    district          = models.CharField(max_length=255)
-    zipcode           = models.CharField(max_length=10)
-    address            = models.TextField()
+	customer          = models.ForeignKey('Customer', on_delete=models.CASCADE)
+	province          = models.CharField(max_length=255)
+	regency           = models.CharField(max_length=255)
+	district          = models.CharField(max_length=255)
+	zipcode           = models.CharField(max_length=10)
+	address           = models.TextField()
 
-    def __str__(self) -> str:
-        return self.pk + " " + self.province + " " + self.regency + " " + self.district
+	def __str__(self) -> str:
+		return self.pk + " " + self.province + " " + self.regency + " " + self.district
 
 
