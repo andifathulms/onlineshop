@@ -98,7 +98,31 @@ class AddToWishlist(View, LoginRequiredMixin):
 
         product = Product.objects.get(pk=kwargs['pk'])
         context["product"] = product
+
         wishlist = request.user.user_customer.wishlist
+
+        if product in wishlist.products.all():
+            context['error'] = True
+            return render(request, 'product/snippets/partial/add_to_wishlist.html', context)
+
         wishlist.products.add(product)
         return render(request, 'product/snippets/partial/add_to_wishlist.html', context)
 
+class DeleteFromWishlist(View, LoginRequiredMixin):
+    
+    def get(self, request, *args, **kwargs):
+        context = {}
+        populated_context_subcategory(context)
+
+        product = Product.objects.get(pk=kwargs['pk'])
+        wishlist = request.user.user_customer.wishlist
+        wishlist.products.remove(product)
+
+        last_seen_id = request.user.user_customer.returnCleanLastView()
+        clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(last_seen_id)])
+        ordering = 'CASE %s END' % clauses
+        context["products_in_wishlist"] = wishlist.products.count()
+        context["wishlist_products"] = wishlist.products.all()
+        context["products"] = Product.objects.filter(pk__in=last_seen_id).extra(select={'ordering': ordering}, order_by=('ordering',))
+
+        return render(request, 'orders/wishlist.html', context)

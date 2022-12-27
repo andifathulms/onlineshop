@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style>
+    #wishlist-header {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+{% include 'product/snippets/css/product_card_css.html' %}
+{% endblock style %}
+
+{% block content %}
+    {% if products_in_wishlist > 0 %}
+        {% include 'orders/snippets/wishlist.html' %}
+    {% else %}
+        {% include 'orders/snippets/wishlist_blank.html' %}
+    {% endif %}
+
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 10px; margin-bottom: 10px;">
+        <h3 style="color: #404040; font-weight: bolder;">Terakhir Kamu Lihat</h3>
+    </div>
+    {% include 'product/snippets/product_card.html' %}
+{% endblock content %}
+
+{% block javascript %}
+{% endblock javascript %}

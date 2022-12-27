@@ -1,0 +1,41 @@
+{% load humanize %}
+<section class="py-2" id="wishlist-header">
+    <h3>Wishlist</h3>
+    <p>Barang-barang yang kamu suka ada disini. Yuk checkout!</p>
+</section>
+
+<section class="py-2">
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        {% for product in wishlist_products %}
+        <div class="post-module mb-3 mx-3 p-0">
+            <a href="{% url 'product:product-detail' product.pk %}">
+            <div class="thumbnail">
+                {% with product.image.all|first as first_image %}
+                    <img src="{{first_image.image.url}}" />
+                {% endwith %}
+            </div></a>
+            <div class="post-content" style="text-align: center;">
+                <div class="category"> {{product.discount}}% off </div>
+                <div style="display: flex; align-items: middle; flex-direction: column;">
+                    <h3 class="title">{{ product.title }}</h3>
+                    <h2 class="price">Rp. {{ product.price|intcomma }}</h2>
+                </div>
+                <div class="row" style="z-index: 999;">
+                    <div class="col-6">
+                        <a class="btn btn-outline-danger w-100 rounded" href="{% url 'product:delete-from-wishlist' product.pk %}">
+                            <span><i class="fa-solid fa-trash"></i></span>
+                            Hapus
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a class="btn btn-outline-warning w-100 rounded" href="{% url 'product:product-detail' product.pk %}">
+                            <span><i class="fa-solid fa-cart-plus"></i></span>
+                            Keranjang
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>

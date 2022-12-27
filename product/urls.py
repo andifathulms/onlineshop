@@ -5,6 +5,7 @@ from product.views import(
 	ProductDetailView,
 	OnClickCart,
 	AddToWishlist,
+	DeleteFromWishlist,
 ) 
 
 app_name = 'product'
@@ -14,4 +15,5 @@ urlpatterns = [
 	path('detail/<int:pk>', ProductDetailView.as_view(), name="product-detail"),
 	path('add-to-cart/<int:pk>', OnClickCart.as_view(), name="add-to-cart"),
 	path('add-to-wishlist/<int:pk>', AddToWishlist.as_view(), name="add-to-wishlist"),
+	path('delete-from-wishlist/<int:pk>', DeleteFromWishlist.as_view(), name="delete-from-wishlist"),
 ]
